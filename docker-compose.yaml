@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Python Application Service
+  app:
+    build:
+      context: /app
+      dockerfile: Dockerfile
+    container_name: python-teams-monitor-app
+    environment:
+      - OTEL_SERVICE_NAME=python-teams-monitor
+      - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=local
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - TARGET_URL=https://teams.microsoft.com/v2
+      - REQUEST_INTERVAL_SECONDS=5
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - otel-collector
+    restart: on-failure
+
+  # OpenTelemetry Collector Service
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.100.0
+    container_name: otel-collector-server
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    environment:
+      - DD_API_KEY=<API-KEY>
+      - DD_SITE=datadoghq.com
+    ports:
+      # OTLP gRPC receiver
+      - "4317:4317"
+      # OTLP HTTP receiver
+      - "4318:4318"
+      - "13133:13133"
+      - "55679:55679"
+    restart: on-failure

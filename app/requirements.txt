@@ -1,0 +1,5 @@
+requests
+opentelemetry-sdk
+opentelemetry-api
+opentelemetry-instrumentation-requests
+opentelemetry-exporter-otlp-proto-grpc # For OTLP gRPC exporter
