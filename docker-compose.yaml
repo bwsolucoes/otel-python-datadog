@@ -9,7 +9,7 @@ services:
     container_name: python-teams-monitor-app
     environment:
       - OTEL_SERVICE_NAME=python-teams-monitor
-      - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=local
+      - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=local,service.version=1.0.0,git.commit.sha=1e8b5735173932820e6eee22a4c03f030924625c,git.repository_url=github.com/bwsolucoes/otel-python-datadog
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
       - TARGET_URL=https://teams.microsoft.com/v2
       - REQUEST_INTERVAL_SECONDS=5
